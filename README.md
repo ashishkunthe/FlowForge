@@ -11,7 +11,6 @@ password:""
 2:-"/auth/signin":
 payload:
 {
-username:"",
 email:"",
 password:""
 }
