@@ -141,6 +141,10 @@ route.post(
         motivation: motivation ?? "",
         howToAchieve: howToAchieve ?? "",
       });
+      res.json({
+        messgae: "plan generated",
+        plan: plan,
+      });
     } catch (error) {
       console.log("error in getting assistance", error);
       res.json({
