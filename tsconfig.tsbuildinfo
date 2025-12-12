@@ -1,1 +1,1 @@
-{"root":["./src/index.ts","./src/types/usertype.ts","./src/modules/user.ts","./src/routes/auth.ts"],"version":"5.9.3"}
+{"root":["./src/index.ts","./src/types/usertype.ts","./src/middleware/authmiddleware.ts","./src/modules/idea.ts","./src/modules/user.ts","./src/routes/auth.ts","./src/routes/idea.ts","./src/services/generateplan.ts"],"version":"5.9.3"}

@@ -2,6 +2,7 @@ import { Request, Response, Router } from "express";
 import { ideaSchema } from "../Types/userType";
 import { Idea } from "../modules/Idea";
 import { authMiddleware } from "../middleware/authMiddleware";
+import { generatePlan } from "../services/generatePlan";
 
 const route = Router();
 
@@ -101,6 +102,47 @@ route.get(
       });
     } catch (error) {
       console.log("error is getting idea", error);
+      res.json({
+        message: "internal server error",
+      });
+    }
+  }
+);
+
+route.post(
+  "/assist/:id",
+  authMiddleware as any,
+  async (req: Request, res: Response) => {
+    const request = req as RequestExtended;
+
+    try {
+      const userId = request.userId;
+      const id = request.params.id;
+
+      const findIdea = await Idea.findById(id);
+
+      if (!findIdea) {
+        return res.json({
+          message: "idea not found",
+        });
+      }
+
+      if (findIdea.userId.toString() !== userId) {
+        return res.json({
+          message: "access denied",
+        });
+      }
+
+      const { title, mainIdea, motivation, howToAchieve } = findIdea;
+
+      const plan = await generatePlan({
+        title,
+        mainIdea,
+        motivation: motivation ?? "",
+        howToAchieve: howToAchieve ?? "",
+      });
+    } catch (error) {
+      console.log("error in getting assistance", error);
       res.json({
         message: "internal server error",
       });

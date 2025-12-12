@@ -27,3 +27,6 @@ payload :headers : authenctication token
 
 5:-"/idea/:id":GET
 payload :headers : authenctication token
+
+5:-"/idea/assist/:id":POST
+payload :headers : authenctication token
