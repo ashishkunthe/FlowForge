@@ -88,6 +88,12 @@ route.get(
       const userId = request.userId;
       const id = req.params.id;
 
+      if (!id || !userId) {
+        return res.json({
+          message: "pls make sure you're passing the id ",
+        });
+      }
+
       const idea = await Idea.findOne({ _id: id, userId });
 
       if (!idea) {
@@ -96,10 +102,18 @@ route.get(
         });
         return;
       }
+      const plan = await Plan.findOne({ ideaId: id, userId });
+
+      if (!plan) {
+        return res.json({
+          message: "no plan generated yet for this idea",
+        });
+      }
 
       res.json({
         message: "get idea successfull",
         idea: idea,
+        plan: plan ?? null,
       });
     } catch (error) {
       console.log("error is getting idea", error);
@@ -165,8 +179,5 @@ route.post(
     }
   }
 );
-
-// need to add the another route which will return the plans generated
-// if there is no plan then it will return no plan generated yet and pls click on assist
 
 export default route;
