@@ -28,7 +28,7 @@ payload :headers : authenctication token
 5:-"/idea/:id":GET
 payload :headers : authenctication token
 
-5:-"/idea/assist/:id":POST
+6:-"/idea/assist/:id":POST
 payload :headers : authenctication token
 
 output of the 5th route:
@@ -91,3 +91,6 @@ output of the 5th route:
 ]
 }
 }
+
+7:-"user/notification/update" POST
+payload : { emailEnabled:boolean, smsEnabled:boolean, phone:string, reminderTime:string }

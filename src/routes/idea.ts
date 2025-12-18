@@ -3,6 +3,7 @@ import { ideaSchema } from "../Types/userType";
 import { Idea } from "../modules/Idea";
 import { authMiddleware } from "../middleware/authMiddleware";
 import { generatePlan } from "../services/generatePlan";
+import { Plan } from "../modules/Plan";
 
 const route = Router();
 
@@ -141,6 +142,17 @@ route.post(
         motivation: motivation ?? "",
         howToAchieve: howToAchieve ?? "",
       });
+
+      await Plan.create({
+        ideaId: findIdea._id,
+        userId: request.userId,
+        summary: plan.summary,
+        roadmap: plan.roadmap,
+        challenges: plan.challenges,
+        improvements: plan.improvements,
+        nextSteps: plan.nextSteps,
+      });
+
       res.json({
         messgae: "plan generated",
         plan: plan,
@@ -153,5 +165,8 @@ route.post(
     }
   }
 );
+
+// need to add the another route which will return the plans generated
+// if there is no plan then it will return no plan generated yet and pls click on assist
 
 export default route;

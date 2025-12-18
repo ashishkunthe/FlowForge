@@ -5,6 +5,9 @@ import cors from "cors";
 
 import authRoutes from "./routes/auth";
 import ideaRoutes from "./routes/idea";
+import userRoutes from "./routes/user";
+
+import { startScheduler } from "./services/scheduler";
 
 dotenv.config();
 
@@ -21,6 +24,9 @@ app.get("/", (req, res) => {
 
 app.use("/auth", authRoutes);
 app.use("/idea", ideaRoutes);
+app.use("/user", userRoutes);
+
+startScheduler();
 
 app.listen(5000, () => {
   mongoose
