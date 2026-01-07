@@ -104,16 +104,12 @@ route.get(
       }
       const plan = await Plan.findOne({ ideaId: id, userId });
 
-      if (!plan) {
-        return res.json({
-          message: "no plan generated yet for this idea",
-        });
-      }
-
-      res.json({
-        message: "get idea successfull",
-        idea: idea,
-        plan: plan ?? null,
+      return res.json({
+        message: plan
+          ? "get idea successful"
+          : "no plan generated yet for this idea",
+        idea,
+        plan: plan || null,
       });
     } catch (error) {
       console.log("error is getting idea", error);
