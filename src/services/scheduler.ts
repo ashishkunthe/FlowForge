@@ -12,22 +12,45 @@ export const agenda = new Agenda({
 
 // @ts-ignore
 agenda.define("send-email-reminder", async (job) => {
-  const { userId } = job.attrs.data as { userId: string };
+  console.log("🟡 JOB TRIGGERED");
 
-  console.log("new Id", userId);
+  try {
+    if (!job.attrs.data) {
+      console.log("❌ No job data found");
+      return;
+    }
 
-  const user = await User.findById(userId);
-  if (!user) return;
-  //   @ts-ignore
-  if (!user.notification.emailEnabled) return;
+    const { userId } = job.attrs.data as { userId: string };
+    console.log("🟢 USER ID:", userId);
 
-  const plan = await Plan.findOne({ userId }).sort({ createdAt: -1 });
-  if (!plan) return;
+    const user = await User.findById(userId);
+    if (!user) {
+      console.log("❌ User not found");
+      return;
+    }
 
-  await SendEmail(user.email, plan);
+    if (!user.notification?.emailEnabled) {
+      console.log("⚠️ Email notifications disabled for user");
+      return;
+    }
+
+    const plan = await Plan.findOne({ userId }).sort({ createdAt: -1 });
+    if (!plan) {
+      console.log("⚠️ No plan found for user");
+      return;
+    }
+
+    console.log("📤 Sending email to:", user.email);
+
+    await SendEmail(user.email, plan.nextSteps);
+
+    console.log("✅ EMAIL SENT SUCCESSFULLY");
+  } catch (error) {
+    console.error("🔥 AGENDA JOB FAILED:", error);
+  }
 });
 
 export async function startScheduler() {
   await agenda.start();
-  console.log("Agenda scheduler started");
+  console.log("🚀 Agenda scheduler started");
 }
